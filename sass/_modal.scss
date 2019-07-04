@@ -1,5 +1,14 @@
 #conversejs {
     #converse-modals {
+
+        .modal-body {
+            margin-bottom: 2em;
+        }
+
+        .scrollable-list {
+            overflow-y: auto;
+        }
+
         .set-xmpp-status {
             margin: 1em;
             .custom-control-label {
@@ -43,7 +52,7 @@
             width: 100%;
             margin-bottom: 1em;
         }
-        
+
         .fingerprint-trust {
             display: flex;
             justify-content: space-between;

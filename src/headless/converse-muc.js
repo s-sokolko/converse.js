@@ -816,17 +816,21 @@ converse.plugins.add('converse-muc', {
                 this.features.save(attrs);
             },
 
-            /* Send an IQ stanza to the server, asking it for the
-             * member-list of this groupchat.
-             * See: https://xmpp.org/extensions/xep-0045.html#modifymember
+            /**
+             * Send an IQ stanza to the server, asking it for the
+             * affiliation-list of this groupchat.
+             *
+             * See for example https://xmpp.org/extensions/xep-0045.html#modifymember
+             * and https://xmpp.org/extensions/xep-0045.html#modifyban
+             *
              * @private
-             * @method _converse.ChatRoom#requestMemberList
-             * @param { string } affiliation - The specific member list to
-             *      fetch. 'admin', 'owner' or 'member'.
-             * @returns:
+             * @method _converse.ChatRoom#requestAffiliationList
+             * @param { string } affiliation - The specific affiliation-list to
+             *      fetch. 'admin', 'owner', 'member' or 'outcast'.
+             * @returns { promise }
              *  A promise which resolves once the list has been retrieved.
              */
-            requestMemberList (affiliation) {
+            requestAffiliationList (affiliation) {
                 affiliation = affiliation || 'member';
                 const iq = $iq({to: this.get('jid'), type: "get"})
                     .c("query", {xmlns: Strophe.NS.MUC_ADMIN})
@@ -1074,7 +1078,7 @@ converse.plugins.add('converse-muc', {
                     affiliations = [affiliations];
                 }
                 const result = await Promise.all(affiliations.map(a =>
-                    this.requestMemberList(a)
+                    this.requestAffiliationList(a)
                         .then(iq => u.parseMemberListIQ(iq))
                         .catch(iq => {
                             _converse.log(iq, Strophe.LogLevel.ERROR);

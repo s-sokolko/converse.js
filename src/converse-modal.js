@@ -7,6 +7,7 @@
 import "backbone.vdomview";
 import bootstrap from "bootstrap.native";
 import converse from "@converse/headless/converse-core";
+import tpl_alert from "templates/alert.html";
 import tpl_alert_modal from "templates/alert_modal.html";
 
 const { Strophe, Backbone, _ } = converse.env;
@@ -36,6 +37,22 @@ converse.plugins.add('converse-modal', {
             insertIntoDOM () {
                 const container_el = _converse.chatboxviews.el.querySelector("#converse-modals");
                 container_el.insertAdjacentElement('beforeEnd', this.el);
+            },
+
+            alert (message, type='primary') {
+                const body = this.el.querySelector('.modal-body');
+                body.insertAdjacentHTML(
+                    'afterBegin',
+                    tpl_alert({
+                        'type': `alert-${type}`,
+                        'message': message
+                    })
+                );
+                const el = body.firstElementChild;
+                setTimeout(() => {
+                    u.addClass('fade-out', el);
+                    setTimeout(() => u.removeElement(el), 600);
+                }, 5000);
             },
 
             show (ev) {

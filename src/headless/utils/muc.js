@@ -74,10 +74,9 @@ u.computeAffiliationsDelta = function computeAffiliationsDelta (exclude_existing
 };
 
 u.parseMemberListIQ = function parseMemberListIQ (iq) {
-    /* Given an IQ stanza with a member list, create an array of member objects.
-    */
-    return _.map(
-        sizzle(`query[xmlns="${Strophe.NS.MUC_ADMIN}"] item`, iq),
+    /* Given an IQ stanza with an affiliation list, create an array of member objects.
+     */
+    return sizzle(`query[xmlns="${Strophe.NS.MUC_ADMIN}"] item`, iq).map(
         (item) => {
             const data = {
                 'affiliation': item.getAttribute('affiliation'),
