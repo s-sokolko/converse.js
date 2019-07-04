@@ -15,7 +15,6 @@ import bootstrap from "bootstrap.native";
 import converse from "@converse/headless/converse-core";
 import muc_utils from "@converse/headless/utils/muc";
 import tpl_add_chatroom_modal from "templates/add_chatroom_modal.html";
-import tpl_affiliation_list_modal from "templates/affiliation_list_modal.html";
 import tpl_chatarea from "templates/chatarea.html";
 import tpl_chatroom from "templates/chatroom.html";
 import tpl_chatroom_bottom_panel from "templates/chatroom_bottom_panel.html";
@@ -31,6 +30,7 @@ import tpl_chatroom_password_form from "templates/chatroom_password_form.html";
 import tpl_chatroom_sidebar from "templates/chatroom_sidebar.html";
 import tpl_info from "templates/info.html";
 import tpl_list_chatrooms_modal from "templates/list_chatrooms_modal.html";
+import tpl_moderator_tools_modal from "templates/moderator_tools_modal.html";
 import tpl_occupant from "templates/occupant.html";
 import tpl_room_description from "templates/room_description.html";
 import tpl_room_item from "templates/room_item.html";
@@ -43,10 +43,11 @@ import xss from "xss/dist/xss";
 const { Backbone, Promise, Strophe, dayjs, sizzle, _, $build, $iq, $msg, $pres } = converse.env;
 const u = converse.env.utils;
 
+const ROLES = ['moderator', 'participant', 'visitor'];
 const AFFILIATIONS = ['admin', 'member', 'outcast', 'owner'];
 const AFFILIATION_CHANGE_COMANDS = ['admin', 'ban', 'owner', 'member', 'revoke'];
 const OWNER_COMMANDS = ['owner'];
-const ADMIN_COMMANDS = ['admin', 'ban', 'deop', 'destroy', 'list', 'member', 'op', 'revoke'];
+const ADMIN_COMMANDS = ['admin', 'ban', 'deop', 'destroy', 'modtools', 'member', 'op', 'revoke'];
 const MODERATOR_COMMANDS = ['kick', 'mute', 'voice'];
 const VISITOR_COMMANDS = ['nick'];
 
@@ -204,22 +205,70 @@ converse.plugins.add('converse-muc-views', {
         }
 
 
-        _converse.AffiliationListModal = _converse.BootstrapModal.extend({
+        _converse.ModeratorToolsModal = _converse.BootstrapModal.extend({
 
             events: {
                 'submit .affiliation-form': 'assignAffiliation',
-                'submit .query-affiliation': 'queryAffiliation'
+                'submit .role-form': 'assignRole',
+                'submit .query-affiliation': 'queryAffiliation',
+                'submit .query-role': 'queryRole',
+                'click  .nav-item .nav-link': 'switchTab',
+                'click .toggle-form': 'toggleForm',
             },
 
-            async initialize (attrs) {
+            initialize (attrs) {
                 this.chatroomview = attrs.chatroomview;
                 _converse.BootstrapModal.prototype.initialize.apply(this, arguments);
-                await this.requestAffiliationList();
-                this.model.on('change:affiliation', () => {
-                    this.list = null;
+
+                this.model.on('change:role', () => {
+                    this.users_with_role = this.getUsersWithRole();
                     this.render();
-                    this.requestAffiliationList();
                 });
+                this.model.on('change:affiliation', async () => {
+                    this.loading_users_with_affiliation = true;
+                    this.users_with_affiliation = null;
+                    this.render();
+                    this.users_with_affiliation = await this.requestAffiliationList();
+                    this.loading_users_with_affiliation = false;
+                    this.render();
+                });
+            },
+
+            toHTML () {
+                const allowed_commands = this.chatroomview.getAllowedCommands();
+                const allowed_affiliations = allowed_commands.map(c => COMMAND_TO_AFFILIATION[c]).filter(c => c);
+                const allowed_roles = _.uniq(allowed_commands
+                    .map(c => COMMAND_TO_ROLE[c])
+                    .filter(c => c));
+
+                allowed_affiliations.sort();
+                allowed_roles.sort();
+
+                return tpl_moderator_tools_modal(Object.assign(this.model.toJSON(), {
+                    '__': __,
+                    'affiliations': AFFILIATIONS,
+                    'allowed_affiliations': allowed_affiliations,
+                    'allowed_roles': allowed_roles,
+                    'loading_users_with_affiliation': this.loading_users_with_affiliation,
+                    'roles': ROLES,
+                    'users_with_affiliation': this.users_with_affiliation,
+                    'users_with_role': this.users_with_role
+                }));
+            },
+
+            toggleForm (ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                const form_class = ev.target.getAttribute('data-form');
+                const forms = this.el.getElementsByClassName(form_class);
+                Array.from(forms).forEach(el => {
+                    if (u.hasClass('hidden', el)) {
+                        u.removeClass('hidden', el);
+                    } else {
+                        u.addClass('hidden', el);
+                    }
+                });
+
             },
 
             async requestAffiliationList () {
@@ -229,17 +278,36 @@ converse.plugins.add('converse-muc-views', {
                 } catch (e) {
                     _converse.log(e, Strophe.LogLevel.ERROR);
                     this.alert(__('Something went wrong while querying for users with that affiliation'), 'error');
-                    this.list = [];
-                    return;
+                    return [];
                 }
-                this.list = sizzle(`query[xmlns="${Strophe.NS.MUC_ADMIN}"] item`, iq)
+                return sizzle(`query[xmlns="${Strophe.NS.MUC_ADMIN}"] item`, iq)
                     .map(item => ({
                         'affiliation': item.getAttribute('affiliation'),
                         'jid': item.getAttribute('jid'),
                         'nick': item.getAttribute('nick')
                     })
                 );
-                this.render();
+            },
+
+            getUsersWithRole () {
+                return this.chatroomview.model.occupants
+                    .where({'role': this.model.get('role')})
+                    .map(item => {
+                        return {
+                            'jid': item.get('jid'),
+                            'nick': item.get('nick'),
+                            'role': item.get('role')
+                        }
+                    });
+            },
+
+            queryRole (ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                const data = new FormData(ev.target);
+                const role = data.get('role');
+                this.model.set({'role': null}, {'silent': true});
+                this.model.set({'role': role});
             },
 
             queryAffiliation (ev) {
@@ -269,26 +337,35 @@ converse.plugins.add('converse-muc-views', {
                         this.chatroomview.model.occupants.fetchMembers()
                     })
                     .catch(err => {
-                        this.alert(__('Sorry, something went wrong while trying to set the affiliation'), 'error');
+                        this.alert(__('Sorry, something went wrong while trying to set the affiliation'), 'danger');
                         _converse.log(err, Strophe.LogLevel.ERROR);
                     });
             },
 
-            toHTML () {
-                const current_affiliation = this.model.get('affiliation');
-                const allowed_commands = this.chatroomview.getAllowedCommands();
-                const allowed_affiliations = allowed_commands
-                    .map(c => COMMAND_TO_AFFILIATION[c])
-                    .filter(c => c)
-                    .filter(a => a != current_affiliation);
-                allowed_affiliations.sort();
-
-                return tpl_affiliation_list_modal(Object.assign(this.model.toJSON(), {
-                    '__': __,
-                    'affiliations': AFFILIATIONS,
-                    'allowed_affiliations': allowed_affiliations,
-                    'list': this.list
-                }));
+            assignRole (ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                const data = new FormData(ev.target);
+                const jid = data.get('jid');
+                const occupant = this.chatroomview.model.getOccupant(jid);
+                const role = data.get('role');
+                const reason = data.get('reason');
+                const current_role = this.model.get('role');
+                this.chatroomview.model.setRole(occupant, role, reason,
+                    () => {
+                        this.alert(__('Role changed'), 'primary');
+                        this.model.set({'role': null}, {'silent': true});
+                        this.model.set({'role': current_role});
+                    },
+                    (e) => {
+                        if (sizzle(`not-allowed[xmlns="${Strophe.NS.STANZAS}"]`, e).length) {
+                            this.alert(__('You\'re not allowed to make that change'), 'danger');
+                        } else {
+                            this.alert(__('Sorry, something went wrong while trying to set the role'), 'danger');
+                        }
+                        _converse.log(e, Strophe.LogLevel.ERROR);
+                    }
+                );
             }
         });
 
@@ -685,10 +762,10 @@ converse.plugins.add('converse-muc-views', {
                 return _converse.ChatBoxView.prototype.onKeyUp.call(this, ev);
             },
 
-            showAffiliationListModal (affiliation) {
+            showModeratorToolsModal (affiliation) {
                 if (_.isUndefined(this.model.affiliation_list_modal)) {
                     const model = new Backbone.Model({'affiliation': affiliation});
-                    this.affiliation_list_modal = new _converse.AffiliationListModal({'model': model, 'chatroomview': this});
+                    this.affiliation_list_modal = new _converse.ModeratorToolsModal({'model': model, 'chatroomview': this});
                 } else {
                     this.affiliation_list_modal.set('affiliation', affiliation);
                 }
@@ -1093,14 +1170,8 @@ converse.plugins.add('converse-muc-views', {
                         this.setAffiliation(command, args, ['admin', 'owner']);
                         break;
                     }
-                    case 'list': {
-                        if (args.length === 0 || !AFFILIATIONS.includes(args)) {
-                            this.showErrorMessage(
-                                __('You need to specify an affiliation to list. '+
-                                   'Allowed values are "outcast", "member", "admin", "owner".'))
-                            break;
-                        }
-                        this.showAffiliationListModal(args);
+                    case 'modtools': {
+                        this.showModeratorToolsModal(args);
                         break;
                     }
                     case 'deop': {
@@ -1133,7 +1204,7 @@ converse.plugins.add('converse-muc-views', {
                             `<strong>/destroy</strong>: ${__('Remove this groupchat')}`,
                             `<strong>/help</strong>: ${__('Show this menu')}`,
                             `<strong>/kick</strong>: ${__('Kick user from groupchat')}`,
-                            `<strong>/list</strong>: ${__('List all users with a given affiliation')}`,
+                            `<strong>/modtools</strong>: ${__('Opens up the moderator tools GUI')}`,
                             `<strong>/me</strong>: ${__('Write in 3rd person')}`,
                             `<strong>/member</strong>: ${__('Grant membership to a user')}`,
                             `<strong>/mute</strong>: ${__("Remove user's ability to post messages")}`,

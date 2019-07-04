@@ -10,7 +10,7 @@ import converse from "@converse/headless/converse-core";
 import tpl_alert from "templates/alert.html";
 import tpl_alert_modal from "templates/alert_modal.html";
 
-const { Strophe, Backbone, _ } = converse.env;
+const { Strophe, Backbone, sizzle, _ } = converse.env;
 const u = converse.env.utils;
 
 
@@ -20,6 +20,10 @@ converse.plugins.add('converse-modal', {
         const { _converse } = this;
 
         _converse.BootstrapModal = Backbone.VDOMView.extend({
+
+            events: {
+                'click  .nav-item .nav-link': 'switchTab'
+            },
 
             initialize () {
                 this.render().insertIntoDOM();
@@ -37,6 +41,17 @@ converse.plugins.add('converse-modal', {
             insertIntoDOM () {
                 const container_el = _converse.chatboxviews.el.querySelector("#converse-modals");
                 container_el.insertAdjacentElement('beforeEnd', this.el);
+            },
+
+            switchTab (ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                sizzle('.nav-link.active', this.el).forEach(el => {
+                    u.removeClass('active', this.el.querySelector(el.getAttribute('href')));
+                    u.removeClass('active', el);
+                });
+                u.addClass('active', ev.target);
+                u.addClass('active', this.el.querySelector(ev.target.getAttribute('href')))
             },
 
             alert (message, type='primary') {
