@@ -497,7 +497,7 @@ converse.plugins.add('converse-register', {
                     stanza.querySelectorAll('field').forEach(field => {
                         buttons.insertAdjacentHTML(
                             'beforebegin',
-                            utils.xForm2webForm(field, stanza, {'domain': this.domain})
+                            utils.xForm2webForm(field, stanza, {'domain': this.domain}, _converse)
                         );
                     });
                 } else {

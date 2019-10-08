@@ -1573,7 +1573,7 @@ converse.plugins.add('converse-muc-views', {
                     '__': __,
                     'title': _.get(stanza.querySelector('title'), 'textContent'),
                     'instructions': _.get(stanza.querySelector('instructions'), 'textContent'),
-                    'fields': fields.map(f => u.xForm2webForm(f, stanza, options))
+                    'fields': fields.map(f => u.xForm2webForm(f, stanza, options, _converse))
                 });
             },
 

@@ -1784,11 +1784,12 @@ msgstr "Скачать"
 msgid "Download video file \"%1$s\""
 msgstr "Скачать видеофайл \"%1$s\""
 
-#, fuzzy
+msgid "Insert emojis"
+msgstr "Вставить смайлик"
+
 #~ msgid "Destroy groupchat"
 #~ msgstr "Войти в комнату"
 
-#, fuzzy
 #~ msgid "Destroy room"
 #~ msgstr "Временный чат"
 
@@ -1807,9 +1808,6 @@ msgstr "Скачать видеофайл \"%1$s\""
 #~ msgid "Clear all messages"
 #~ msgstr "Очистить все сообщения"
 
-msgid "Insert emojis"
-msgstr "Вставить смайлик"
-
 #~ msgid "Start a call"
 #~ msgstr "Инициировать звонок"
 
@@ -1823,30 +1821,24 @@ msgstr "Вставить смайлик"
 #~ msgstr ""
 #~ "Твой ID Jabber'а и/или пароль некорректный. Пожалуйста попробуй снова."
 
-#, fuzzy
 #~ msgid "%1$s is now an "
 #~ msgstr "%1$s теперь модератор."
 
-#, fuzzy
 #~ msgid "Error: the groupchat "
 #~ msgstr "Войти в комнату"
 
-#, fuzzy
 #~ msgid "This groupchat is being moderated"
 #~ msgstr "Эта комната модерируется"
 
-#, fuzzy
 #~ msgid "This groupchat is not being moderated"
 #~ msgstr "Эта комната не модерируется"
 
-#, fuzzy
 #~ msgid "Jabber ID"
 #~ msgstr "Идентификатор XMPP:"
 
 #~ msgid "Personal message"
 #~ msgstr "Ваше сообщение"
 
-#, fuzzy
 #~ msgid "Room address (JID)"
 #~ msgstr "Адрес комнаты (идентификатор):"
 
@@ -1862,7 +1854,6 @@ msgstr "Вставить смайлик"
 #~ msgid "This room is publicly searchable"
 #~ msgstr "Эта комната доступна для публичного поиска"
 
-#, fuzzy
 #~ msgid "this room is restricted to members only"
 #~ msgstr "Эта комната предназначена только для участников"
 
@@ -2093,15 +2084,12 @@ msgstr "Вставить смайлик"
 #~ msgid "No rooms on %1$s"
 #~ msgstr "Нет чатов %1$s"
 
-#, fuzzy
 #~ msgid "The reason given is: \"%1$s \""
 #~ msgstr "Причина: \""
 
-#, fuzzy
 #~ msgid "Close this box"
 #~ msgstr "Закрыть это окно чата"
 
-#, fuzzy
 #~ msgid "Account Registration"
 #~ msgstr "Получить форму регистрации"
 
@@ -2114,11 +2102,9 @@ msgstr "Вставить смайлик"
 #~ msgid "Requesting a registration form from the XMPP server"
 #~ msgstr "Запрашивается регистрационная форма с XMPP сервера"
 
-#, fuzzy
 #~ msgid "Reconnecting"
 #~ msgstr "Соединение"
 
-#, fuzzy
 #~ msgid "Connection error"
 #~ msgstr "Не удалось соединится"
 
@@ -2131,48 +2117,39 @@ msgstr "Вставить смайлик"
 #~ msgid "Authentication Failed"
 #~ msgstr "Не удалось авторизоваться"
 
-#, fuzzy
 #~ msgid "Connection failed"
 #~ msgstr "Не удалось соединится"
 
-#, fuzzy
 #~ msgid "An error occurred while connecting to the chat server: "
 #~ msgstr "При сохранение формы произошла ошибка."
 
 #~ msgid "Error: the \""
 #~ msgstr "Ошибка:  \""
 
-#, fuzzy
 #~ msgid "The reason given is: \""
 #~ msgstr "Причина: \""
 
-#, fuzzy
 #~ msgid "Click to mention "
 #~ msgstr "Зайти в чат"
 
-#, fuzzy
 #~ msgid "Server:"
 #~ msgstr "Сервер"
 
 #~ msgid "Return"
 #~ msgstr "Назад"
 
-#, fuzzy
 #~ msgid "The reason given is: <em>\"%1$s\"</em>."
 #~ msgstr "Причина: \""
 
-#, fuzzy
 #~ msgid "Authentication failed."
 #~ msgstr "Не удалось авторизоваться"
 
 #~ msgid "Disconnected"
 #~ msgstr "Отключено"
 
-#, fuzzy
 #~ msgid "Minimize this box"
 #~ msgstr "Свернуть окно чата"
 
-#, fuzzy
 #~ msgid "Attempting to reconnect"
 #~ msgstr "Попытка восстановить соединение через 5 секунд"
 
@@ -2194,15 +2171,15 @@ msgstr "Вставить смайлик"
 #~ msgid "Disconnecting"
 #~ msgstr "Отключаемся"
 
-#, fuzzy
 #~ msgid "Decline"
 #~ msgstr "В сети"
 
 #~ msgid "Private key generated."
 #~ msgstr "Приватный ключ сгенерирован."
 
-msgid "Configuration of room"
-msgstr "Конфигурация группы"
+#, javascript-format
+msgid "Configuration of room %1$s"
+msgstr "Конфигурация группы %1$s"
 
 msgid "Room title"
 msgstr "Название группы"

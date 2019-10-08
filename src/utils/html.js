@@ -545,7 +545,16 @@ u.fadeIn = function (el, callback) {
  * @method u#xForm2webForm
  * @param { XMLElement } field - the field to convert
  */
-u.xForm2webForm = function (field, stanza, options) {
+u.xForm2webForm = function (field, stanza, options, _converse) {
+    const { __ } = _converse;
+
+    function translate(str) {
+	if (!str) {
+            return str;
+	}
+	return __(str);
+    }
+
     if (field.getAttribute('type') === 'list-single' ||
         field.getAttribute('type') === 'list-multi') {
 
@@ -559,7 +568,7 @@ u.xForm2webForm = function (field, stanza, options) {
                 const value = _.get(option.querySelector('value'), 'textContent');
                 return tpl_select_option({
                     'value': value,
-                    'label': option.getAttribute('label'),
+                    'label': translate(option.getAttribute('label')),
                     'selected': _.includes(values, value),
                     'required': !_.isNil(field.querySelector('required'))
                 })
@@ -568,7 +577,7 @@ u.xForm2webForm = function (field, stanza, options) {
         return tpl_form_select({
             'id': u.getUniqueId(),
             'name': field.getAttribute('var'),
-            'label': field.getAttribute('label'),
+            'label': translate(field.getAttribute('label')),
             'options': options.join(''),
             'multiple': (field.getAttribute('type') === 'list-multi'),
             'required': !_.isNil(field.querySelector('required'))
@@ -579,7 +588,7 @@ u.xForm2webForm = function (field, stanza, options) {
     } else if (field.getAttribute('type') === 'jid-multi') {
         return tpl_form_textarea({
             'name': field.getAttribute('var'),
-            'label': field.getAttribute('label') || '',
+            'label': translate(field.getAttribute('label')) || '',
             'value': _.get(field.querySelector('value'), 'textContent'),
             'required': !_.isNil(field.querySelector('required'))
         });
@@ -587,13 +596,13 @@ u.xForm2webForm = function (field, stanza, options) {
         return tpl_form_checkbox({
             'id': u.getUniqueId(),
             'name': field.getAttribute('var'),
-            'label': field.getAttribute('label') || '',
+            'label': translate(field.getAttribute('label')) || '',
             'checked': _.get(field.querySelector('value'), 'textContent') === "1" && 'checked="1"' || '',
             'required': !_.isNil(field.querySelector('required'))
         });
     } else if (field.getAttribute('var') === 'url') {
         return tpl_form_url({
-            'label': field.getAttribute('label') || '',
+            'label': translate(field.getAttribute('label')) || '',
             'value': _.get(field.querySelector('value'), 'textContent')
         });
     } else if (field.getAttribute('var') === 'username') {
@@ -601,7 +610,7 @@ u.xForm2webForm = function (field, stanza, options) {
             'domain': ' @'+options.domain,
             'name': field.getAttribute('var'),
             'type': XFORM_TYPE_MAP[field.getAttribute('type')],
-            'label': field.getAttribute('label') || '',
+            'label': translate(field.getAttribute('label')) || '',
             'value': _.get(field.querySelector('value'), 'textContent'),
             'required': !_.isNil(field.querySelector('required'))
         });
@@ -609,7 +618,7 @@ u.xForm2webForm = function (field, stanza, options) {
         const uri = field.querySelector('uri');
         const el = sizzle('data[cid="'+uri.textContent.replace(/^cid:/, '')+'"]', stanza)[0];
         return tpl_form_captcha({
-            'label': field.getAttribute('label'),
+            'label': translate(field.getAttribute('label')),
             'name': field.getAttribute('var'),
             'data': _.get(el, 'textContent'),
             'type': uri.getAttribute('type'),
@@ -619,7 +628,7 @@ u.xForm2webForm = function (field, stanza, options) {
         const name = field.getAttribute('var');
         return tpl_form_input({
             'id': u.getUniqueId(),
-            'label': field.getAttribute('label') || '',
+            'label': translate(field.getAttribute('label')) || '',
             'name': name,
             'fixed_username': options.fixed_username,
             'autocomplete': getAutoCompleteProperty(name, options),
