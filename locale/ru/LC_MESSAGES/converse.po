@@ -1019,7 +1019,7 @@ msgstr "Роль"
 msgid ""
 "Use commas to separate multiple roles. Your roles are shown next to your "
 "name on your chat messages."
-msgstr ""
+msgstr "Для указания нескольких ролей перечислите их через запятую. Ваши роли отображаются возле Вашего имени в сообщениях чата."
 
 #: dist/converse-no-dependencies.js:40231
 msgid "URL"
@@ -1073,7 +1073,7 @@ msgstr "Сообщение о личном статусе"
 
 #: dist/converse-no-dependencies.js:40355
 msgid "About"
-msgstr ""
+msgstr "О программе"
 
 #: dist/converse-no-dependencies.js:40357
 #, javascript-format
@@ -1197,7 +1197,7 @@ msgstr "Нажмите, чтобы переключить список комн�
 
 #: dist/converse-no-dependencies.js:41623
 msgid "Open Groupchats"
-msgstr ""
+msgstr "Открытые группы"
 
 #: dist/converse-no-dependencies.js:41673
 #, fuzzy, javascript-format
@@ -1464,7 +1464,7 @@ msgstr "Войти в новую комнату"
 
 #: dist/converse-no-dependencies.js:75256
 msgid "This field is required"
-msgstr ""
+msgstr "Это поле обязательно"
 
 #: dist/converse-no-dependencies.js:75262
 msgid "Join"
@@ -1601,7 +1601,7 @@ msgstr "Только модераторы могут видеть ваш псе�
 #: dist/converse-no-dependencies.js:76086
 msgid ""
 "Participants entering this groupchat need to request permission to write"
-msgstr ""
+msgstr "Участники, присоединившиеся к группе, должны запросить разрешение на отправку сообщений"
 
 #: dist/converse-no-dependencies.js:75944
 #: dist/converse-no-dependencies.js:76096
@@ -1612,7 +1612,7 @@ msgstr "Немодерируемый"
 #: dist/converse-no-dependencies.js:75946
 #: dist/converse-no-dependencies.js:76094
 msgid "Participants entering this groupchat can write right away"
-msgstr ""
+msgstr "Участники, присоединившиеся к группе, могут отправлять сообщения сразу"
 
 #: dist/converse-no-dependencies.js:75952
 #: dist/converse-no-dependencies.js:76104
@@ -1690,7 +1690,7 @@ msgstr "Архивация сообщений"
 
 #: dist/converse-no-dependencies.js:77391
 msgid "Save and close"
-msgstr ""
+msgstr "Сохранить и закрыть"
 
 #: dist/converse-no-dependencies.js:77395
 msgid "This device's OMEMO fingerprint"
@@ -2259,3 +2259,85 @@ msgstr "Скачать видеофайл \"%1$s\""
 
 #~ msgid "Private key generated."
 #~ msgstr "Приватный ключ сгенерирован."
+
+msgid "Configuration of room"
+msgstr "Конфигурация группы"
+
+msgid "Room title"
+msgstr "Название группы"
+
+msgid "Room description"
+msgstr "Описание группы"
+
+msgid "Natural Language for Room Discussions"
+msgstr "Естественный язык общения"
+
+msgid "Make room persistent"
+msgstr "Сделать группу стойкой"
+
+msgid "Make room public searchable"
+msgstr "Сделать группу доступной для поиска всеми"
+
+msgid "Make participants list public"
+msgstr "Сделать список участников публичным"
+
+msgid "Make room password protected"
+msgstr "Защитить группу паролем"
+
+msgid "Maximum Number of Occupants"
+msgstr "Максимальное число участников"
+
+msgid "Present real Jabber IDs to"
+msgstr "Разрешить показ настоящих JID"
+
+msgid "Roles for which Presence is Broadcasted"
+msgstr "Роли с рассылкой сообщений присутствия"
+
+msgid "Make room members-only"
+msgstr "Ограничить группу только для участников"
+
+msgid "Make room moderated"
+msgstr "Сделать группу модерируемой"
+
+msgid "Default users as participants"
+msgstr "Пользователи как участники по умолчанию"
+
+msgid "Allow users to change the subject"
+msgstr "Разрешить пользователям менять тему"
+
+msgid "Allow users to send private messages"
+msgstr "Разрешить пользователям отправлять приватные сообщения"
+
+msgid "Allow visitors to send private messages to"
+msgstr "Разрешить посетителям отправлять приватные сообщения в адрес"
+
+msgid "Allow users to query other users"
+msgstr "Разрешить пользователям отправлять запросы другим пользователям"
+
+msgid "Allow users to send invites"
+msgstr "Разрешить пользователям отправлять приглашения"
+
+msgid "Allow visitors to send status text in presence updates"
+msgstr "Разрешить посетителям отправлять текст статуса в сообщениях присутствия"
+
+msgid "Allow visitors to change nickname"
+msgstr "Разрешить посетителям менять псеводним"
+
+msgid "Allow visitors to send voice requests"
+msgstr "Разрешить посетителям отправлять голосовые запросы"
+
+msgid "Allow subscription"
+msgstr "Разрешить подписку"
+
+msgid "Minimum interval between voice requests (in seconds)"
+msgstr "Минимальный интервал между голосовыми запросами (в секундах)"
+
+msgid "XMPP URI of Associated Publish-Subscribe Node"
+msgstr "XMPP URI связанного узла подписки"
+
+msgid "Exclude Jabber IDs from CAPTCHA challenge"
+msgstr "Исключить JID из запроса CAPTCHA"
+
+msgid "Enable message archiving"
+msgstr "Разрешить архивацию сообщений"
+
