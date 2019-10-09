@@ -1569,9 +1569,16 @@ converse.plugins.add('converse-muc-views', {
                     'new_password': !password_protected,
                     'fixed_username': this.model.get('jid')
                 };
+		let title = _.get(stanza.querySelector('title'), 'textContent'),
+		    title_regexp = /^(.*)\s+(\w*@.*)$/,
+		    title_groups = title.match(title_regexp);
+		if (title_groups && title_groups.length > 2) {
+                    let title_common = __(title_groups[1]);
+                    title = title_common + ' ' + title_groups[2];
+		}
                 return tpl_chatroom_form({
                     '__': __,
-                    'title': _.get(stanza.querySelector('title'), 'textContent'),
+                    'title': title,
                     'instructions': _.get(stanza.querySelector('instructions'), 'textContent'),
                     'fields': fields.map(f => u.xForm2webForm(f, stanza, options, _converse))
                 });
