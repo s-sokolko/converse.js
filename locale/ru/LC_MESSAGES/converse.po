@@ -2177,9 +2177,10 @@ msgstr "Вставить смайлик"
 #~ msgid "Private key generated."
 #~ msgstr "Приватный ключ сгенерирован."
 
+#: dist/converse-no-dependencies.js:42405
 #, javascript-format
-msgid "Configuration of room %1$s"
-msgstr "Конфигурация группы %1$s"
+msgid "Configuration of room"
+msgstr "Конфигурация группы"
 
 msgid "Room title"
 msgstr "Название группы"
@@ -2258,4 +2259,7 @@ msgstr "Исключить JID из запроса CAPTCHA"
 
 msgid "Enable message archiving"
 msgstr "Разрешить архивацию сообщений"
+
+msgid "Password"
+msgstr "Пароль"
 
